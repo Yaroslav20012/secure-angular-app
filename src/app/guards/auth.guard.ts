@@ -49,24 +49,3 @@ export const authGuard: CanActivateFn = (route, state) => {
     })
   );
 };
-
-// export const authGuard: CanActivateFn = (route, state) => {
-//   const authService = inject(AuthService);
-//   const router = inject(Router);
-
-//   const user = authService.getCurrentUser();
-//   if (user?.token) return of(true);
-
-//   return authService.getNewAccessToken().pipe(
-//     map((response: any) => {
-//       const currentUser = authService.getCurrentUser();
-//       if (currentUser?.token) return true;
-//       router.navigate(['/login']);
-//       return false;
-//     }),
-//     catchError(() => {
-//       router.navigate(['/login']);
-//       return of(false);
-//     })
-//   );
-// };

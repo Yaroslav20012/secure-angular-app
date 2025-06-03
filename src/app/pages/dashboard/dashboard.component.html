@@ -1,5 +1,28 @@
-<h2>Личный кабинет</h2>
+<h2>Пользователи</h2>
 
-<p>Добро пожаловать!</p>
+@if (users.length > 0) {
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users; track user.id) {
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.email }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} 
 
-<button (click)="logout()">Выход</button>
+@if (users.length === 0) {
+  <p>Нет данных</p>
+}
+
+@if (error) {
+  <p style="color: red;">{{ error }}</p>
+}
