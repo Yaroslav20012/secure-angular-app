@@ -1,0 +1,31 @@
+<h2>Вход</h2>
+
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="email">Email:</label>
+    <input id="email" type="email" type="email" formControlName="email" />
+    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+      <div class="error">
+        Введите корректный email.
+      </div>
+    }
+  </div>
+
+  <div>
+    <label for="password">Пароль:</label>
+    <input id="password" type="password" type="password" formControlName="password" />
+    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+      <div class="error">
+        Пароль должен быть не менее 6 символов.
+      </div>
+    }
+  </div>
+
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+
+  <button type="submit" [disabled]="loginForm.invalid">Войти</button>
+</form>
+
+<p>Нет аккаунта? <a routerLink="/register" style="pointer-events: auto;">Зарегистрируйтесь</a></p>
