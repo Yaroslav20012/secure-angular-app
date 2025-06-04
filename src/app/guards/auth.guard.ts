@@ -14,20 +14,7 @@ export class AuthGuard {//implements CanActivate {
   canActivate(): boolean {
     const user = this.authService.getCurrentUser();
     return !!user?.token;
-    // user && user.token
-    // if (user?.token) {
-    //   return true;
-    // }
-
-    // // Если нет токена → пытаемся обновить через Refresh Token
-    // this.authService.getNewAccessToken().subscribe({
-    //   next: () => {},
-    //   error: () => {
-    //     this.authService.logout();
-    //   }
-    // });
-
-    // return false;
+    
   }
 }
 

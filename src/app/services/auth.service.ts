@@ -8,6 +8,7 @@ export interface User {
   id: number;
   email: string;
   token: string;
+  role?: string;
 }
 
 @Injectable({
@@ -72,33 +73,33 @@ export class AuthService {
   }
 
   // ✅ Реализация RSA-OAEP шифрования
-  private async encryptWithPublicKey(publicKeyPem: string, email: string, password: string) {
-    try {
-      const publicKey = await this.importPublicKey(publicKeyPem);
+    private async encryptWithPublicKey(publicKeyPem: string, email: string, password: string) {
+      try {
+        const publicKey = await this.importPublicKey(publicKeyPem);
 
-      const encryptData = async (key: CryptoKey, data: string): Promise<string> => {
-        const encoder = new TextEncoder();
-        const encrypted = await window.crypto.subtle.encrypt(
-          { name: 'RSA-OAEP'}, //hash: 'SHA-256' },
-          key,
-          encoder.encode(data)
-        );
+        const encryptData = async (key: CryptoKey, data: string): Promise<string> => {
+          const encoder = new TextEncoder();
+          const encrypted = await window.crypto.subtle.encrypt(
+            { name: 'RSA-OAEP', hash: {name: 'SHA-256'} } as AlgorithmIdentifier,
+            key,
+            encoder.encode(data)
+          );
 
-        return btoa(String.fromCharCode(...new Uint8Array(encrypted)));
-      };
+          return btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+        };
 
-      const [encryptedEmail, encryptedPassword] = await Promise.all([
-        encryptData(publicKey, email),
-        encryptData(publicKey, password)
-      ]);
+        const [encryptedEmail, encryptedPassword] = await Promise.all([
+          encryptData(publicKey, email),
+          encryptData(publicKey, password)
+        ]);
 
-      return { encryptedEmail, encryptedPassword };
-    } catch (e) {
-      const error = e as Error;
-      console.error('Ошибка шифрования:', error.message);
-      throw new Error('Не удалось зашифровать данные');
+        return { encryptedEmail, encryptedPassword };
+      } catch (e) {
+        const error = e as Error;
+        console.error('Ошибка шифрования:', error.message);
+        throw new Error('Не удалось зашифровать данные');
+      }
     }
-  }
 
   private async importPublicKey(publicKeyPem: string): Promise<CryptoKey> {
     const pemHeader = '-----BEGIN PUBLIC KEY-----';
