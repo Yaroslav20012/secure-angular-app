@@ -35,7 +35,6 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout();
-    this.userEmail = 'Гость'; // Сбрасываем имя пользователя
     this.router.navigate(['/login'])
   }
 }

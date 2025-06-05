@@ -1,34 +1,22 @@
 <h2>Пользователи</h2>
 
-@if (users.length > 0) {
+@if(users.length) {
   <table>
-    <thead>
+    @for(user of users; track user.id) {
       <tr>
-        <th>ID</th>
-        <th>Email</th>
-        @if (isUserAdmin()) {
-          <th>Действия</th>
-        }
-      </tr>
-    </thead>
-    <tbody>
-      @for (user of users; track user.id) {
-        <tr>
-          <td>{{ user.id }}</td>
-          <td>{{ user.email }}</td>
-          <td *ngIf="isUserAdmin() && currentUser.id !== user.id">
+        <td>{{ user.email }}</td>
+        @if(currentUser.role === 'admin' && currentUser.id !== user.id) {
+          <td>
             <button (click)="deleteUser(user.id)">Удалить</button>
           </td>
-        </tr>
-      }
-    </tbody>
+        }
+      </tr>
+    }
   </table>
+} @else {
+  <p>Нет пользователей</p>
 }
 
-@if (users.length === 0) {
-  <p>Нет данных</p>
-}
-
-@if (error) {
-  <p style="color: red;">{{ error }}</p>
+@if(error) {
+  <div class="error">{{ error }}</div>
 }

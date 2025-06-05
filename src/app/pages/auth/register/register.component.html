@@ -3,7 +3,7 @@
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email" />
+    <input id="email" type="email" formControlName="email" placeholder="Введите почту"/>
     @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
       <div class="error">
         Введите корректный email.
@@ -13,7 +13,7 @@
 
   <div>
     <label for="password">Пароль:</label>
-    <input id="password" type="password" formControlName="password" />
+    <input id="password" type="password" formControlName="password" placeholder="Введите пароль" />
     @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
       <div class="error">
         Минимум 6 символов.
@@ -23,7 +23,7 @@
 
   <div>
     <label>Подтвердите пароль:</label>
-    <input type="password" formControlName="confirmPassword" />
+    <input type="password" formControlName="confirmPassword" placeholder="Подтвердите пароль"/>
     @if (registerForm.value.password &&
           registerForm.value.confirmPassword &&
           registerForm.value.password !== registerForm.value.confirmPassword &&

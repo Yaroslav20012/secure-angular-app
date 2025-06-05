@@ -1,43 +1,35 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { switchMap } from 'rxjs';
+import { throwError } from 'rxjs';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // const authService = inject(AuthService);
-  // const user = authService.getCurrentUser();
-
-  // if (user && user.token) {
-  //   const clonedReq = req.clone({
-  //     headers: req.headers
-  //       .set('Authorization', `Bearer ${user.token}`)
-  //       .set('Content-Type', 'application/json')
-  //   });
-  //   return next(clonedReq);
-  // }
-
-  // return next(req);
+export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
+  try {  
+  console.log('🧾 Interceptor вызван'); // ✅ Этот лог должен появиться
   const authService = inject(AuthService);
-  const user = authService.getCurrentUser();
-  //user?.token
-  if (user?.token) {
-    req = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${user.token}`)
-    });
-
-    return next(req);  
+  const currentUser = authService.getCurrentUser();      
+    if (currentUser?.token && !isTokenExpired(currentUser.token)) {
+      req = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${currentUser.token}`
+        }
+      });
+    }
+    
+    return next(req);
+  } catch (e) {
+    const err = e as Error;
+    console.error("Ошибка в интерсепторе: ", err.message);
+    return throwError(() => err);
   }
-  
-  
-  return authService.getNewAccessToken().pipe(
-    switchMap(() => {
-      const currentUser = authService.getCurrentUser();
-      if (currentUser?.token) {
-        req = req.clone({
-          headers: req.headers.set('Authorization', `Bearer ${currentUser.token}`)
-        });
-      }
-      return next(req);
-    })
-  );
 };
+
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const exp = payload.exp;
+    return Date.now() >= exp * 1000; // преобразуем в миллисекунды
+  } catch {
+    return true; // повреждённый токен считаем истёкшим
+  }
+}

@@ -3,7 +3,7 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="email">Email:</label>
-    <input id="email" type="email" type="email" formControlName="email" />
+    <input id="email" type="email" type="email" formControlName="email" placeholder="Введите почту"/>
     @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
       <div class="error">
         Введите корректный email.
@@ -13,7 +13,7 @@
 
   <div>
     <label for="password">Пароль:</label>
-    <input id="password" type="password" type="password" formControlName="password" />
+    <input id="password" type="password" type="password" formControlName="password" placeholder="Введите пароль" />
     @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
       <div class="error">
         Пароль должен быть не менее 6 символов.
