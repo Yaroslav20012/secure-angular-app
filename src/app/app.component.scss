@@ -1,0 +1,154 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box; // Обеспечиваем корректное вычисление ширины
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  //height: 100%;
+  //width: 100%;
+  overflow-y: hidden;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+
+.page-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* или высоту вашего экрана */
+  overflow-x: hidden; /* запрет горизонтальной прокрутки */
+  overflow-y: auto; /* вертикальная прокрутка, если нужна */
+}
+
+.auth-container {
+  position: relative;
+  width: 400px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.form-wrapper {
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.form-wrapper.login {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.form-wrapper.register {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toggle-button {
+  margin-top: 20px;
+}
+
+
+// .auth-wrapper {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   min-height: 100vh;
+//   padding: 20px;
+
+//   .toggle-btn {
+//     margin-bottom: 20px;
+//     padding: 10px 20px;
+//     border: none;
+//     background-color: #4a90e2;
+//     color: white;
+//     border-radius: 6px;
+//     cursor: pointer;
+//     font-weight: 600;
+//     transition: background-color 0.3s ease;
+
+//     &:hover {
+//       background-color: #357ABD;
+//     }
+//   }
+
+  .route-container {
+    position: relative;
+    perspective: 1000px; /* Добавляем перспективу для 3D эффекта */
+    width: 100%;
+    height: 100vh; /* Или нужная высота */
+    overflow: hidden; /* Скрываем выходящие части, чтобы не было скролла */
+  }
+
+  .route-container > * {
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Скрываем обратную сторону при вращении */
+    transform-style: preserve-3d; /* Сохраняем 3D трансформации */
+  }
+
+  .auth-wrapper {
+  perspective: 1000px;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  will-change: transform; // Оптимизация для производительности
+}
+
+.auth-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.auth-card .front,
+.auth-card .back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.auth-card .back {
+  transform: rotateY(180deg);
+}
+
+.footer {
+  text-align: center;
+  padding: 1rem 1rem; /* уменьшены отступы */
+  font-size: 0.85rem;
+  color: #777;
+  border-top: 1px solid #ddd;
+  background-color: #fafafa;
+  border-radius: 0 0 12px 12px;
+  /* Чтобы футер всегда был снизу */
+  align-self: end;
+  bottom: 0;
+}
+
+
+
+

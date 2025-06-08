@@ -3,14 +3,22 @@
   import { AuthService } from '../../services/auth.service';
   import { Router, RouterModule } from '@angular/router';
   import { CommonModule } from '@angular/common';
+  import DOMPurify from 'dompurify';
+  import { FormsModule } from '@angular/forms';
+
   @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule]
+    imports: [CommonModule, RouterModule, FormsModule]
   })
   export class DashboardComponent implements OnInit {
     users: any[] = [];
+    filteredUsers: any[] = [];//
+    searchQuery: string = '';//
+    currentPage = 1;//
+    itemsPerPage = 5;//
     error: string = '';
     currentUser: any;
 
@@ -42,7 +50,11 @@
 
           console.log('📊 Полученные пользователи:', data);
 
-          this.users = data || [];
+          this.users = data.map((user: { email: any; }) => ({
+          ...user,
+          email: DOMPurify.sanitize(user.email)
+         }));
+        this.applyFilter();
         },
         error: (err) => {
           console.error('❌ Не удалось получить список пользователей:', err.message);
@@ -51,6 +63,37 @@
       });
     }
 
+    applyFilter() {
+      const query = this.searchQuery.trim().toLowerCase();
+      this.filteredUsers = this.users.filter(u =>
+        u.email.toLowerCase().includes(query)
+      );
+      this.currentPage = 1;
+      
+    } 
+
+    get paginatedUsers() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      return this.filteredUsers.slice(start, start + this.itemsPerPage);
+    }
+
+    getTotalPages() {
+      return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+    }
+
+    nextPage() {
+      if (this.currentPage < this.getTotalPages()) {
+        this.currentPage++;
+      }
+    }
+
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    }
+
+    
     isUserAdmin(): boolean {
       return this.currentUser?.role === 'admin';
     }

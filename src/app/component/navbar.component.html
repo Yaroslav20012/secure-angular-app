@@ -1,0 +1,16 @@
+<nav class="navbar">
+    <div class="container">
+      <!-- Логотип + ссылка на домашнюю страницу -->
+      <a [routerLink]="'/home'" class="logo">🔐 SecureSite</a>
+      <a *ngIf="isAuthenticated()" [routerLink]="'/dashboard'" class="dashboard-link" style="margin-left: 15px;">
+        📊 Список пользователей
+      </a>
+      <!-- Кнопки только если не на login/register -->
+      <div class="nav-buttons">       
+
+        <span *ngIf="isAuthenticated()">Привет, {{ userEmail }}!</span>
+        <button *ngIf="isAuthenticated()" (click)="logout()" class="logout-btn">Выйти</button>
+
+      </div>  
+    </div>
+</nav>

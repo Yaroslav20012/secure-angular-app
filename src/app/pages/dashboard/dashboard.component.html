@@ -1,4 +1,4 @@
-<h2>Пользователи</h2>
+<!-- <h2>Пользователи</h2>
 
 @if(users.length) {
   <table>
@@ -15,8 +15,34 @@
   </table>
 } @else {
   <p>Нет пользователей</p>
-}
+}-->
 
-@if(error) {
-  <div class="error">{{ error }}</div>
-}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<h2>👥 Список пользователей</h2>
+<div class="search-wrapper">
+  <i class="fa fa-search search-icon" aria-hidden="true"></i>
+  <input type="text" [(ngModel)]="searchQuery" (input)="applyFilter()" placeholder="Поиск по email..." class="search-input">
+</div>
+
+<div class="cards-container">
+  <div *ngFor="let user of paginatedUsers" class="card">
+    <div class="card-header">
+      <strong>ID:</strong> {{ user.id }}
+    </div>
+    <div class="card-body">
+      <p><strong>Email:</strong> {{ user.email }}</p>          
+       @if(currentUser.role === 'admin' && currentUser.id !== user.id) {
+          <td>
+            <button class="delete-btn" (click)="deleteUser(user.id)">Удалить</button>
+          </td>}
+    </div>
+  </div>
+</div>
+
+<div class="pagination">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">⬅ Назад</button>
+  <span>Страница {{ currentPage }} из {{ getTotalPages() }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage >= getTotalPages()">Вперёд ➡</button>
+</div>

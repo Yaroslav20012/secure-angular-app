@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import DOMPurify from 'dompurify';
+
 
 export interface User {
   id: number;
@@ -44,22 +46,22 @@ export class AuthService {
         console.log('✅ Ответ от сервера:', response);
 
 
-        const user = {
-          id: response.id,
-          email: response.email,
+        const sanitizedUser = { // изначально было user
+          id: Number(response.id),
+          email: DOMPurify.sanitize(response.email),//response.email,
           token: response.token,
           refreshToken: response.refreshToken,
           role: response.role || 'user'
         };
 
 
-        console.log('💾 Сохраняем пользователя в localStorage:', user);
+        console.log('💾 Сохраняем пользователя в localStorage:', sanitizedUser);
 
 
-        localStorage.setItem('user', JSON.stringify(user));
-        this.currentUserSubject.next(user);
+        localStorage.setItem('user', JSON.stringify(sanitizedUser));
+        this.currentUserSubject.next(sanitizedUser);
 
-        console.log('✅ Сохранённый пользователь:', user);
+        console.log('✅ Сохранённый пользователь:', sanitizedUser);
         
       }),
       catchError(err => {
@@ -153,12 +155,12 @@ export class AuthService {
       next: () => {
         localStorage.removeItem('user');
         this.currentUserSubject.next(null);
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
       },
       error: () => {
         localStorage.removeItem('user');
         this.currentUserSubject.next(null);
-        this.router.navigate(['/login']);
+        // this.router.navigate(['/login']);
       }
     });
   }
@@ -194,9 +196,31 @@ export class AuthService {
   }
 
   getCurrentUser(): any {
+    // const userJson = localStorage.getItem('user');
+    // return userJson ? JSON.parse(userJson) : null;
     const userJson = localStorage.getItem('user');
-    return userJson ? JSON.parse(userJson) : null;
-  }
+    if (!userJson) return null;
+
+    // const user = JSON.parse(userJson);
+    //   console.log('🔐 Текущий пользователь:', user);
+
+    // if (user && user.email) {
+    //     user.email = DOMPurify.sanitize(user.email);
+    // }
+
+    try {
+      const user = JSON.parse(userJson);
+      // Очищаем email от возможных скриптов
+      if (user.email && user) {
+        user.email = DOMPurify.sanitize(user.email);
+      }
+      return user;
+    } catch (e) {
+      const err = e as Error
+      console.error('❌ Ошибка чтения пользователя:', err.message);
+      return null;
+    }
+    }
 
   isAuthenticated(): boolean {
     return !!this.getCurrentUser()?.token;

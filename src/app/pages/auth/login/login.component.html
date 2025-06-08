@@ -3,27 +3,21 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div>
     <label for="email">Email:</label>
-    <input id="email" type="email" type="email" formControlName="email" placeholder="Введите почту"/>
-    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-      <div class="error">
-        Введите корректный email.
-      </div>
-    }
+    <input id="email" type="email" formControlName="email" placeholder="Введите почту"/>
+    <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error">
+      Введите корректный email.
+    </div>
   </div>
 
   <div>
     <label for="password">Пароль:</label>
-    <input id="password" type="password" type="password" formControlName="password" placeholder="Введите пароль" />
-    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-      <div class="error">
-        Пароль должен быть не менее 6 символов.
-      </div>
-    }
+    <input id="password" type="password" formControlName="password" placeholder="Введите пароль" />
+    <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+      Пароль должен быть не менее 6 символов.
+    </div>
   </div>
 
-  @if (error) {
-    <div class="error">{{ error }}</div>
-  }
+  <div *ngIf="error" class="error">{{ error }}</div>
 
   <button type="submit" [disabled]="loginForm.invalid">Войти</button>
 </form>

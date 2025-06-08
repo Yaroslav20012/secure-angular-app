@@ -1,40 +1,37 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-navbar',
-  template: `
-    <nav>
-      @if (isAuthenticated()) {
-        <div>
-          <span>Привет, {{ userEmail }}!</span>
-          <a href="#" (click)="logout()">Выйти</a>
-        </div>
-      } @else {
-        <a routerLink="/login">Войти</a>
-        <a routerLink="/register">Зарегистрироваться</a>
-      }
-    </nav>
-  `,
+  imports:[NgIf, RouterModule, FormsModule],
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss'],
   standalone: true
 })
 export class NavbarComponent {
   userEmail: string = 'Гость';
+  private authSubscription: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {
-    const user = this.authService.getCurrentUser();
-    if (user?.email) {
-      this.userEmail = user.email;
-    }
+    this.authSubscription = this.authService.currentUser$.subscribe(user => {
+      if (user && user.email) {
+        this.userEmail = user.email;
+      } else {
+        this.userEmail = 'Гость';
+      }
+    });
   }
 
   isAuthenticated(): boolean {
-    return this.authService.isAuthenticated(); // Теперь вызываем метод из сервиса
+    return this.authService.isAuthenticated();
   }
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login'])
+    this.router.navigate(['/home']);
   }
 }

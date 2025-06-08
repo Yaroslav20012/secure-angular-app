@@ -1,0 +1,112 @@
+a[routerLink] {
+  cursor: pointer;
+}
+
+/* Навбар */
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0; // ✅ Главное — добавь это
+  z-index: 1000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Логотип */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  text-decoration: none;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.logo:hover,
+.logo:focus {
+  color: #4a63d6;
+  outline: none;
+}
+
+/* Ссылка на дашборд */
+.dashboard-link {
+  font-size: 1rem;
+  color: #2a9d8f;
+  text-decoration: none;
+  margin-left: 15px;
+  font-weight: 600;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+.dashboard-link:hover,
+.dashboard-link:focus {
+  color: #1f6f63;
+  outline: none;
+}
+
+/* Блок с кнопками и приветствием */
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Приветствие */
+.nav-buttons span {
+  user-select: none;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Кнопка Выйти */
+.logout-btn {
+  background-color: #ff6f61;
+  border: none;
+  color: white;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255,111,97,0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.logout-btn:hover,
+.logout-btn:focus {
+  background-color: #ff4a3d;
+  box-shadow: 0 6px 20px rgba(255,74,61,0.6);
+  outline: none;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+  .container {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .dashboard-link {
+    margin-left: 0;
+  }
+  .nav-buttons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

@@ -4,40 +4,33 @@
   <div>
     <label for="email">Email:</label>
     <input id="email" type="email" formControlName="email" placeholder="Введите почту"/>
-    @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-      <div class="error">
-        Введите корректный email.
-      </div>
-    }
+    <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+      Введите корректный email.
+    </div>
   </div>
 
   <div>
     <label for="password">Пароль:</label>
     <input id="password" type="password" formControlName="password" placeholder="Введите пароль" />
-    @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-      <div class="error">
-        Минимум 6 символов.
-      </div>
-    }
+    <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+      Минимум 6 символов.
+    </div>
   </div>
 
   <div>
     <label>Подтвердите пароль:</label>
     <input type="password" formControlName="confirmPassword" placeholder="Подтвердите пароль"/>
-    @if (registerForm.value.password &&
-          registerForm.value.confirmPassword &&
-          registerForm.value.password !== registerForm.value.confirmPassword &&
-          registerForm.touched) {
-    }
+    <div *ngIf="registerForm.value.password && 
+                registerForm.value.confirmPassword && 
+                registerForm.value.password !== registerForm.value.confirmPassword && 
+                registerForm.touched" class="error">
+      Пароли не совпадают.
+    </div>
   </div>
 
-  @if (error) {
-    <div class="error">{{ error }}</div>
-  }
+  <div *ngIf="error" class="error">{{ error }}</div>
 
-  @if (successMessage) {
-    <div class="success">{{ successMessage }}</div>
-  }
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
 
   <button type="submit" [disabled]="registerForm.invalid">Зарегистрироваться</button>
 </form>
