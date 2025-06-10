@@ -15,7 +15,6 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
         }
       });
     }
-    
     return next(req);
   } catch (e) {
     const err = e as Error;
