@@ -65,13 +65,13 @@ export class AuthService {
         
       }),
       catchError(err => {
-        console.error('Ошибка входа:', err.message);
+        //console.error('Ошибка входа:', err.message);
         return throwError(() => new Error('Не удалось войти'));
       })
     );
   }
 
-  register(email: string, password: string): Observable<any> {
+  register(email: string, password: string): Observable<any> {   
     return this.http.get(this.keyUrl, { responseType: 'text' }).pipe(
       switchMap(publicKeyPem => this.encryptWithPublicKey(publicKeyPem, email, password)),
       switchMap(({ encryptedEmail, encryptedPassword }) => {
@@ -92,8 +92,16 @@ export class AuthService {
         this.currentUserSubject.next(user);
       }),
       catchError(err => {
-        console.error('Ошибка регистрации:', err.message);
-        return throwError(() => new Error('Не удалось зарегистрироваться'));
+
+        let errorMessage = 'Не удалось зарегистрироваться';
+
+        if (err.status === 400 && err.error?.message) {
+          errorMessage = err.error.message; // Например: "Пользователь с таким email уже существует"
+        } else if (err.status === 500) {
+          errorMessage = 'Внутренняя ошибка сервера';
+        }
+        //console.error('Ошибка регистрации:', errorMessage);
+        return throwError(() => new Error(errorMessage));
       })
     );
   }
@@ -123,7 +131,7 @@ export class AuthService {
         resolve({ encryptedEmail, encryptedPassword });
       } catch (e) {
         const error = e as Error;
-        console.error('Ошибка шифрования:', error.message);
+        //console.error('Ошибка шифрования:', error.message);
         reject(new Error('Не удалось зашифровать данные'));
       }
     });
@@ -151,18 +159,8 @@ export class AuthService {
   }
 
   logout(): void {
-    this.http.post('/api/auth/logout', {}, { withCredentials: true }).subscribe({
-      next: () => {
-        localStorage.removeItem('user');
-        this.currentUserSubject.next(null);
-        // this.router.navigate(['/login']);
-      },
-      error: () => {
-        localStorage.removeItem('user');
-        this.currentUserSubject.next(null);
-        // this.router.navigate(['/login']);
-      }
-    });
+    localStorage.removeItem('user');
+    this.currentUserSubject.next(null);    
   }
 
   getNewAccessToken(): Observable<any> {
@@ -188,7 +186,7 @@ export class AuthService {
         return updatedUser;
       }),
       catchError(err => {
-        console.error('🔄 Не удалось обновить токен:', err.message);
+        //console.error('🔄 Не удалось обновить токен:', err.message);
         this.router.navigate(['/login']);
         return throwError(() => new Error('Сессия истекла'));
       })
@@ -196,17 +194,10 @@ export class AuthService {
   }
 
   getCurrentUser(): any {
-    // const userJson = localStorage.getItem('user');
-    // return userJson ? JSON.parse(userJson) : null;
+
     const userJson = localStorage.getItem('user');
     if (!userJson) return null;
 
-    // const user = JSON.parse(userJson);
-    //   console.log('🔐 Текущий пользователь:', user);
-
-    // if (user && user.email) {
-    //     user.email = DOMPurify.sanitize(user.email);
-    // }
 
     try {
       const user = JSON.parse(userJson);

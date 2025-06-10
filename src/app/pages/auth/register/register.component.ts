@@ -35,19 +35,19 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       const { email, password, confirmPassword } = this.registerForm.value;
 
-      if (password !== confirmPassword) {
-        this.error = 'Пароли не совпадают.';
-        return;
-      }
+    if (password !== confirmPassword) {
+      this.error = 'Пароли не совпадают.';
+      return;
+    }
 
       this.authService.register(email, password).subscribe({
         next: () => {
           this.successMessage = 'Регистрация успешна!';
           setTimeout(() => this.router.navigate(['/login']), 1500);
         },
-        error: (err:Error) => {
-          this.error = 'Ошибка регистрации.';
-          console.log(err)
+        error: (err: any) => {
+        this.error = err.message || 'Ошибка регистрации';
+        console.error('Ошибка регистрации:', err.error?.message || err.message);
         }
       });
     }
