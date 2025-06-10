@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: secure-angular-app
+    env: node
+    buildCommand: npm install && ng build --prod
+    startCommand: npx serve dist/secure-angular-app --single
