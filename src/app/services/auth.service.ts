@@ -28,7 +28,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<any> {
-    return this.http.get(this.keyUrl, { responseType: 'text' }).pipe(
+    return this.http.get(this.keyUrl, { responseType: 'text', withCredentials: true}).pipe(
       switchMap(publicKeyPem => this.encryptWithPublicKey(publicKeyPem, email, password)),
       switchMap(({ encryptedEmail, encryptedPassword }) => {
         
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   register(email: string, password: string): Observable<any> {   
-    return this.http.get(this.keyUrl, { responseType: 'text' }).pipe(
+    return this.http.get(this.keyUrl, { responseType: 'text', withCredentials: true }).pipe(
       switchMap(publicKeyPem => this.encryptWithPublicKey(publicKeyPem, email, password)),
       switchMap(({ encryptedEmail, encryptedPassword }) => {
         return this.http.post(`${this.apiUrl}/register`, {
