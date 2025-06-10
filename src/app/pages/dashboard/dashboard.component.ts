@@ -110,6 +110,7 @@ import { environment } from '../../../environments/environment';
       this.http.delete(`${environment.url}/api/user/${id}`).subscribe({
         next: () => {
           this.users = this.users.filter(u => u.id !== id);
+          this.applyFilter(); // Обновляем фильтрацию
         },
         error: (err) => {
           console.error('Ошибка удаления:', err.message);
