@@ -5,6 +5,7 @@
   import { CommonModule } from '@angular/common';
   import DOMPurify from 'dompurify';
   import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment';
 
   @Component({
     selector: 'app-dashboard',
@@ -45,7 +46,7 @@
       console.log('🧾 Payload:', JSON.parse(atob(this.currentUser.token.split('.')[1])));
 
 
-      this.http.get('/api/user/all', {withCredentials: true, } ).subscribe({
+      this.http.get(`${environment.url}/api/user/all`, {withCredentials: true, } ).subscribe({
         next: (data: any) => {
 
           console.log('📊 Полученные пользователи:', data);
@@ -54,7 +55,7 @@
           ...user,
           email: DOMPurify.sanitize(user.email)
          }));
-        this.applyFilter();
+          this.applyFilter();
         },
         error: (err) => {
           console.error('❌ Не удалось получить список пользователей:', err.message);
@@ -106,7 +107,7 @@
 
       if (!confirm('Вы уверены?')) return;
 
-      this.http.delete(`/api/user/${id}`).subscribe({
+      this.http.delete(`${environment.url}/api/user/${id}`).subscribe({
         next: () => {
           this.users = this.users.filter(u => u.id !== id);
         },
