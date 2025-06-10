@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:3000",
+    "target": "https://secure-api-6w7f.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
