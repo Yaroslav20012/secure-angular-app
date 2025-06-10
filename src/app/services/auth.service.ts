@@ -65,7 +65,7 @@ export class AuthService {
         
       }),
       catchError(err => {
-        //console.error('Ошибка входа:', err.message);
+        console.error('Ошибка входа:', err.message);
         return throwError(() => new Error('Не удалось войти'));
       })
     );
