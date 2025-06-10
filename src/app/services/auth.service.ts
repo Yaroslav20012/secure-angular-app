@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import DOMPurify from 'dompurify';
+import { environment } from '../../environments/environment';
 
 
 export interface User {
@@ -21,8 +22,8 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(this.getCurrentUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private keyUrl = '/api/key/public-key';
-  private apiUrl = '/api/auth';
+  private keyUrl = environment.url + '/api/key/public-key';
+  private apiUrl = environment.url + '/api/auth';
 
   constructor(private http: HttpClient, private router: Router) {}
 
