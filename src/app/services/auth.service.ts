@@ -35,7 +35,6 @@ export class AuthService {
         console.log('📧 Зашифрованный email:', encryptedEmail);
         console.log('🔐 Зашифрованный пароль:', encryptedPassword);
 
-
         return this.http.post(`${this.apiUrl}/login`, {
           email: encryptedEmail,
           password: encryptedPassword
