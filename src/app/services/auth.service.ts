@@ -22,7 +22,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(this.getCurrentUser());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private keyUrl = environment.url + '/api/key/public-key';
+  private keyUrl = environment.url + '/api/key/public-key'; 
   private apiUrl = environment.url + '/api/auth';
 
   constructor(private http: HttpClient, private router: Router) {}

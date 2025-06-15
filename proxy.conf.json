@@ -4,6 +4,6 @@
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",
-    "withCredentials": true
+    "withCredentials": true 
   }
 } 

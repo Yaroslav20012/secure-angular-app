@@ -10,4 +10,4 @@ export default defineConfig({
     host: true, // Так Vite слушает все хосты
     allowedHosts: ['spitefully-adjusted-jabiru.cloudpub.ru'] // ✅ Разрешаем этот хост
   }
-});
+}); 
