@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://secure-api-6w7f.onrender.com",
+    "target": "https://virulently-earnest-rodent.cloudpub.ru",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

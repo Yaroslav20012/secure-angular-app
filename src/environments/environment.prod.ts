@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: 'https://secure-api-y8ew.onrender.com'  
+  url: 'https://virulently-earnest-rodent.cloudpub.ru'  
 };
